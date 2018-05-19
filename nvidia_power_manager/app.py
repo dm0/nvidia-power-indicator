@@ -48,8 +48,10 @@ class Indicator:
     LIB_PATH = '/usr/lib/nvidia-power-manager/'
     SCRIPT_CMD = 'sudo ' + LIB_PATH + 'gpuswitcher'
     BASEDIR = os.path.dirname(os.path.realpath(__file__))
-    ACTIVE_ICON = os.path.join(BASEDIR, 'icons', 'active.svg')
-    INACTIVE_ICON = os.path.join(BASEDIR, 'icons', 'inactive.svg')
+    ACTIVE_ICON = os.path.join(
+        BASEDIR, 'icons', 'nvidia-power-manager-active.svg')
+    INACTIVE_ICON = os.path.join(
+        BASEDIR, 'icons', 'nvidia-power-manager-inactive.svg')
 
     def __init__(self):
         self.menu = Gtk.Menu()
