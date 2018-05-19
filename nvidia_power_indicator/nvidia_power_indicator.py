@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # This file is part of NVIDIA Power Manager - indicator applet for NVIDIA
