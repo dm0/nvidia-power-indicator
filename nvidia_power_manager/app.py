@@ -183,7 +183,8 @@ class Indicator:
 
 
 def kill_other_instances() -> None:
-    otherpid = subprocess.run(['pgrep', '-f', 'nvidia-power-manager'])
+    otherpid = subprocess.run(['pgrep', '-f', 'nvidia-power-manager'],
+                              stdout=subprocess.PIPE)
     if otherpid.returncode == 0:
         otherpid = str(otherpid.stdout)  # type:str
         pidlist = otherpid.splitlines()  # type:List[str]
