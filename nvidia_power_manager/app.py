@@ -144,7 +144,7 @@ class Indicator:
             if len(procs) > 0:
                 proc_info = [
                     ('{proc.name} (pid: {proc.pid}, mem: '
-                     '{proc.mem:0.1}MB').format(proc=p) for p in procs
+                     '{proc.mem:0.1f} MB)').format(proc=p) for p in procs
                 ]
                 message = (
                     'It seems there are programs using the NVIDIA GPU. '
