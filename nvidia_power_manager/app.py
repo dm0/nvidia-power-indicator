@@ -149,7 +149,7 @@ class Indicator:
                 message = (
                     'It seems there are programs using the NVIDIA GPU. '
                     'They need to be stopped before turning the GPU off:\n'
-                ) + proc_info.join('\n')
+                ) + '\n'.join(proc_info)
         if message is not None:
             dialog = Gtk.MessageDialog(None,
                                        Gtk.DialogFlags.MODAL,
