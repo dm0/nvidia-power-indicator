@@ -135,6 +135,7 @@ class Indicator:
 
     def turn_nv_off(self) -> None:
         message = None
+        message_details = None
         try:
             procs = self.get_device_procs(0)
         except Exception as e:
@@ -148,16 +149,19 @@ class Indicator:
                 ]
                 message = (
                     'It seems there are programs using the NVIDIA GPU. '
-                    'They need to be stopped before turning the GPU off:\n'
-                ) + '\n'.join(proc_info)
+                    'They need to be stopped before turning the GPU off\n'
+                )
+                message_details = '\n'.join(proc_info)
         if message is not None:
-            dialog = Gtk.MessageDialog(None,
+            dialog = Gtk.MessageDialog(Gtk.Window(),
                                        Gtk.DialogFlags.MODAL,
                                        Gtk.MessageType.ERROR,
                                        Gtk.ButtonsType.OK,
                                        message)
-            dialog.set_deletable(False)
+            if message_details is not None:
+                dialog.format_secondary_text(message_details)
             dialog.run()
+            dialog.destroy()
         else:
             os.system(Indicator.SCRIPT_CMD + ' off')
             self.set_nv_pm_labels()
