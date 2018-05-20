@@ -198,11 +198,14 @@ def kill_other_instances() -> None:
                         pass
 
 
-if __name__ == '__main__':
-
+def main():
     # If bbswitch isn't installed or isn't supported, exit cleanly
     if not os.path.isfile('/proc/acpi/bbswitch'):
         sys.exit(0)
 
     kill_other_instances()
     Indicator().execute()
+
+
+if __name__ == '__main__':
+    main()
