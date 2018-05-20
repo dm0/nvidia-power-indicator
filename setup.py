@@ -4,12 +4,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='nvidia-power-manager',
-    version='1.0.0',
+    use_scm_version=True,
     install_requires=[
         'py3nvml'
     ],
     setup_requires=[
-        # 'setuptools_scm'
+        'setuptools_scm'
     ],
     description='Indicator applet to turn On / Off nvidia GPU on laptops',
     author='Dmitri Lapin',
