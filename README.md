@@ -57,8 +57,14 @@ Use `pip` to install package. This package installs XDG autostart file and
 
 This package depends on [py3nvml](https://github.com/fbcotter/py3nvml) package
 that is not available in PyPi. So it should be either installed manually or 
-this package should be installed with `--process-dependency-links` option.
+this package should be installed with `--process-dependency-links` option:
 
 ```bash
 sudo pip3 install --process-dependency-links git+https://github.com/dm0/nvidia-power-manager#egg=nvidia-power-manager
+```
+
+Applet will start on next reboot. Use the following command to start in current session:
+
+```bash
+nvidia-power-manager & disown
 ```
