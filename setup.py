@@ -34,6 +34,8 @@ setup(
     description='Indicator applet to turn On / Off nvidia GPU on laptops',
     author='Dmitri Lapin',
     author_email='lapin@cvisionlab.com',
+    url='https://github.com/dm0/nvidia-power-manager',
+    license='GPLv3',
     packages=find_packages(exclude=['tests.*']),
     package_data={'nvidia_power_manager': ['icons/*.svg', 'sbin/gpuswitcher']},
     entry_points={
