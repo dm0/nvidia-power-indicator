@@ -60,5 +60,5 @@ that is not available in PyPi. So it should be either installed manually or
 this package should be installed with `--process-dependency-links` option.
 
 ```bash
-sudo pip3 install git+https://github.com/dm0/nvidia-power-manager#egg=nvidia-power-manager
+sudo pip3 install --process-dependency-links git+https://github.com/dm0/nvidia-power-manager#egg=nvidia-power-manager
 ```
