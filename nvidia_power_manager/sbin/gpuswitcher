@@ -21,12 +21,30 @@
 # along with NVIDIA Power Manager. If not, see <http://www.gnu.org/licenses/>.
 
 
+rrmmod() {
+    out=$(rmmod $@ 2>&1)
+    err=$?
+    if [ $err -ne 0 ]; then
+        if [[ $out = *"is in use by"* ]]; then
+            modules=$(sed -e 's/^.*in use by:\s*//g' <<< $out)
+            rrmmod $modules
+            rrmmod $@
+        fi
+    fi
+}
+
 if [[ $1 == "on" ]]
 then
     modprobe nvidia &>/dev/null
     tee /proc/acpi/bbswitch <<< ON &>/dev/null
 else
-    modprobe -r -a nvidia nvidia_uvm ipmi_devintf ipmi_msghandler &>/dev/null
+    # try modprobe -r first
+    modprobe -r -a nvidia &>/dev/null
+    # if nvidia module is still there, try to rmmod it with dependencies
+    out=$(lsmod | grep -w nvidia)
+    if [ $? -eq 0 ]; then
+        rrmmod nvidia
+    fi
     tee /proc/acpi/bbswitch <<< OFF &>/dev/null
 fi
 
