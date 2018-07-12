@@ -23,10 +23,10 @@
 
 if [[ $1 == "on" ]]
 then
-    modprobe -a nvidia_drm nvidia_modeset nvidia_uvm nvidia &>/dev/null
+    modprobe nvidia &>/dev/null
     tee /proc/acpi/bbswitch <<< ON &>/dev/null
 else
-    rmmod nvidia_drm nvidia_modeset nvidia_uvm nvidia &>/dev/null
+    modprobe -r -a nvidia nvidia_uvm ipmi_devintf ipmi_msghandler &>/dev/null
     tee /proc/acpi/bbswitch <<< OFF &>/dev/null
 fi
 
