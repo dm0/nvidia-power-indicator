@@ -31,6 +31,7 @@ setup(
     setup_requires=[
         'setuptools_scm'
     ],
+    python_requires='>=3',
     description='Indicator applet to turn On / Off nvidia GPU on laptops',
     author='Dmitri Lapin',
     author_email='lapin@cvisionlab.com',
