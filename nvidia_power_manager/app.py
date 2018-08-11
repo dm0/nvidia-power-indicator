@@ -25,6 +25,8 @@ import sys
 import os
 import signal
 import subprocess
+import argparse
+import logging
 
 from py3nvml import py3nvml
 
@@ -41,6 +43,8 @@ from typing import Optional, List
 from collections import namedtuple
 
 ProcInfo = namedtuple('ProcInfo', ['name', 'pid', 'mem'])
+
+logger = logging.getLogger('nvidia-power-manager')
 
 
 class Indicator:
@@ -98,6 +102,7 @@ class Indicator:
     def is_nvidia_on(self) -> bool:
         with open('/proc/acpi/bbswitch', 'r') as fh:
             out = fh.readline()
+        logger.debug('is_nvidia_on: bbswitch state: %s', out)
         return out.strip().lower().endswith('on')
 
     def switch_nv_power(self, dude) -> None:
@@ -107,6 +112,8 @@ class Indicator:
             self.turn_nv_on()
 
     def turn_nv_on(self) -> None:
+        logger.info('Swithing GPU on...')
+        logger.debug('turn_nv_on: executing "%s on"', Indicator.SCRIPT_CMD)
         os.system(Indicator.SCRIPT_CMD + ' on')
         self.set_nv_pm_labels()
 
@@ -134,6 +141,7 @@ class Indicator:
         return result
 
     def turn_nv_off(self) -> None:
+        logger.info('Swithing GPU off...')
         message = None
         message_details = None
         try:
@@ -141,6 +149,7 @@ class Indicator:
         except Exception as e:
             procs = None
             message = 'Failed to query device: {error}'.format(error=e)
+            logger.exception('Failed to query device')
         else:
             if len(procs) > 0:
                 proc_info = [
@@ -152,6 +161,7 @@ class Indicator:
                     'They need to be stopped before turning the GPU off\n'
                 )
                 message_details = '\n'.join(proc_info)
+                logger.warning('GPU device is in use. Can\'t stop')
         if message is not None:
             dialog = Gtk.MessageDialog(Gtk.Window(),
                                        Gtk.DialogFlags.MODAL,
@@ -175,6 +185,7 @@ class Indicator:
         return Gtk.ResponseType.CANCEL
 
     def refresh(self) -> None:
+        logger.debug('refresh: updating device state')
         self.t = Timer(2, self.refresh)
         self.t.start()
 
@@ -187,6 +198,7 @@ class Indicator:
 
 
 def kill_other_instances() -> None:
+    logger.info('Killing other instances')
     otherpid = subprocess.run(['pgrep', '-f', 'nvidia-power-manager'],
                               stdout=subprocess.PIPE)
     if otherpid.returncode == 0:
@@ -197,6 +209,7 @@ def kill_other_instances() -> None:
                 pid = int(pid)  # type:int
                 if pid != os.getpid():
                     try:
+                        logger.info('Killing PID %d', pid)
                         os.kill(pid, signal.SIGTERM)
                         os.kill(pid, signal.SIGKILL)
                     except ProcessLookupError:
@@ -204,8 +217,37 @@ def kill_other_instances() -> None:
 
 
 def main():
+
+    parser = argparse.ArgumentParser(
+        description='NVidia Power Manager applet',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+
+    parser.add_argument('--log-level', '-l', default='WARN',
+                        choices=['DEBUG', 'WARN', 'ERROR'],
+                        help='Log level')
+    parser.add_argument('--syslog-socket', default='/dev/log',
+                        help='Syslog unix socket path')
+    parser.add_argument('--debug', action='store_true',
+                        help='Enable debug mode: set log level to DEBUG and '
+                        'log to stderr')
+
+    args = parser.parse_args()
+
+    if args.debug:
+        args.log_level = 'DEBUG'
+        log_handler = logging.StreamHandler()
+    else:
+        log_handler = logging.handlers.SysLogHandler(args.syslog_socket)
+
+    logger.set_level(getattr(logging, args.log_level.upper()))
+    log_handler.set_level(getattr(logging, args.log_level.upper()))
+    logger.addHandler(log_handler)
+
     # If bbswitch isn't installed or isn't supported, exit cleanly
     if not os.path.isfile('/proc/acpi/bbswitch'):
+        logger.critical('Check bbswitch installation (/proc/acpi/bbswitch '
+                        'doesn\'t exist on inaccessible)')
         sys.exit(0)
 
     kill_other_instances()
