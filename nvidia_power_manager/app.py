@@ -31,6 +31,7 @@ import signal
 import subprocess
 import argparse
 import logging
+import logging.handlers
 
 from py3nvml import py3nvml
 
