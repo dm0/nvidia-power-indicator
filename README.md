@@ -42,6 +42,21 @@ sudo apt-get install python3 mesa-utils bbswitch-dkms gir1.2-appindicator3
 sudo apt-get install $(sudo ubuntu-drivers devices | grep -o nvidia-[[:digit:]]*)
 ```
 
+## Installation
+
+Use `pip` to install package. This package installs XDG autostart file and 
+`sudoers.d` file so `pip install` must be invoked with `sudo`.
+
+```bash
+sudo pip3 install git+https://github.com/dm0/nvidia-power-manager#egg=nvidia-power-manager
+```
+
+Applet will start on next reboot. Use the following command to start in current session:
+
+```bash
+nvidia-power-manager & disown
+```
+
 ## Troubleshooting
 
 ### `appindicator` module missing
@@ -50,21 +65,5 @@ Install the `gir1.2-appindicator3` package.
 ### Couldn't find RGB GLX visual or fbconfig
 Install the `mesa-utils` package.
 
-## Installation
-
-Use `pip` to install package. This package installs XDG autostart file and 
-`sudoers.d` file so `pip install` must be invoked with `sudo`.
-
-This package depends on [py3nvml](https://github.com/fbcotter/py3nvml) package
-that is not available in PyPi. So it should be either installed manually or 
-this package should be installed with `--process-dependency-links` option:
-
-```bash
-sudo pip3 install --process-dependency-links git+https://github.com/dm0/nvidia-power-manager#egg=nvidia-power-manager
-```
-
-Applet will start on next reboot. Use the following command to start in current session:
-
-```bash
-nvidia-power-manager & disown
-```
+### Installing from root session
+Installing from root session in Ubuntu doesn't work. Use `sudo` to install package. 
