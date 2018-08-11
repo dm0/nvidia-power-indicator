@@ -21,6 +21,10 @@
 # You should have received a copy of the GNU General Public License
 # along with NVIDIA Power Manager. If not, see <http://www.gnu.org/licenses/>.
 
+"""
+NVidia Power Manager indicator applet.
+"""
+
 import sys
 import os
 import signal
@@ -48,6 +52,33 @@ logger = logging.getLogger('nvidia-power-manager')
 
 
 class Indicator:
+    """
+    Indicator application.
+
+    Attributes
+    ----------
+    ACTIVE_ICON : str
+        Path to "active" state icon (GPU switched on)
+    APP_NAME : str
+        Application name
+    BASEDIR : str
+        Base directory for relative paths
+    icon : AppIndicator3.Indicator
+        Indicator icon instance
+    INACTIVE_ICON : str
+        Path to "inactive" state icon (GPU switched off)
+    LIB_PATH : str
+        Path to installed scripts directory
+    menu : Gtk.Menu
+        GTK Menu instance (popup menu)
+    SCRIPT_CMD : str
+        gpuswitcher script command line
+    switch_power_management : Gtk.MenuItem
+        Menu item to toggle GPU state
+    t : threading.Timer
+        Timer used to refresh device state
+    """
+
     APP_NAME = 'NVIDIA Power Manager'
     LIB_PATH = '/usr/lib/nvidia-power-manager/'
     SCRIPT_CMD = 'sudo ' + LIB_PATH + 'gpuswitcher'
@@ -58,6 +89,9 @@ class Indicator:
         BASEDIR, 'icons', 'nvidia-power-manager-inactive.svg')
 
     def __init__(self):
+        """
+        Initialize application.
+        """
         self.menu = Gtk.Menu()
 
         self.switch_power_management = Gtk.MenuItem()
@@ -87,37 +121,100 @@ class Indicator:
         self.refresh()
 
     def terminate(self, window=None, data=None) -> None:
+        """
+        Shutdown application.
+
+        Parameters
+        ----------
+        window : unused
+            Placeholder for the actual parameter passed by GTK
+        data : unused
+            Placeholder for the actual parameter passed by GTK
+        """
         self.t.cancel()
         Gtk.main_quit()
 
     def execute(self):
+        """
+        Enter application message loop.
+        """
         Gtk.main()
 
     def nv_power_switch_string(self, nvidia_on) -> str:
+        """
+        Return string describing GPU toggle action.
+
+        Parameters
+        ----------
+        nvidia_on : bool
+            Current GPU state.
+
+        Returns
+        -------
+        str
+            String describing current GPU toggle action.
+        """
         if nvidia_on is None:
             nvidia_on = self.is_nvidia_on()
         return 'Power {state} GPU'.format(
             state=('Off' if nvidia_on else 'On'))
 
     def is_nvidia_on(self) -> bool:
+        """
+        Check current GPU state.
+
+        Returns
+        -------
+        bool
+            Returns True if GPU is enabled and False otherwise.
+        """
         with open('/proc/acpi/bbswitch', 'r') as fh:
             out = fh.readline()
         logger.debug('is_nvidia_on: bbswitch state: %s', out)
         return out.strip().lower().endswith('on')
 
     def switch_nv_power(self, dude) -> None:
+        """
+        Toggle GPU state.
+
+        Parameters
+        ----------
+        dude : unused
+            Placeholder for the actual parameter passed by GTK.
+        """
         if self.is_nvidia_on():
             self.turn_nv_off()
         else:
             self.turn_nv_on()
 
     def turn_nv_on(self) -> None:
+        """
+        Switch on GPU.
+        """
         logger.info('Swithing GPU on...')
         logger.debug('turn_nv_on: executing "%s on"', Indicator.SCRIPT_CMD)
         os.system(Indicator.SCRIPT_CMD + ' on')
         self.set_nv_pm_labels()
 
     def get_device_procs(self, device_id: int) -> Optional[List[ProcInfo]]:
+        """
+        List processes running on the GPU.
+
+        Parameters
+        ----------
+        device_id : int
+            Device identifier
+
+        Returns
+        -------
+        Optional[List[ProcInfo]]
+            List of ProcInfo named tuples (name, pid, mem fields)
+
+        Raises
+        ------
+        RuntimeError
+            In case of py3nvml failure.
+        """
         py3nvml.nvmlInit()
         dev_count = py3nvml.nvmlDeviceGetCount()  # type: int
         if not (0 <= device_id < dev_count):
@@ -141,6 +238,9 @@ class Indicator:
         return result
 
     def turn_nv_off(self) -> None:
+        """
+        Switch off GPU device.
+        """
         logger.info('Swithing GPU off...')
         message = None
         message_details = None
@@ -177,14 +277,38 @@ class Indicator:
             self.set_nv_pm_labels()
 
     def set_nv_pm_labels(self, nvidia_on=None) -> None:
+        """
+        Update menu item label.
+
+        Parameters
+        ----------
+        nvidia_on : bool, optional
+            Current GPU state.
+        """
         self.switch_power_management.set_label(
             self.nv_power_switch_string(nvidia_on))
         self.switch_power_management.show()
 
     def ignore(self, *args):
+        """
+        Handle ignore.
+
+        Parameters
+        ----------
+        *args
+            Unused.
+
+        Returns
+        -------
+        Gtk.ResponseType
+            Gtk.ResponseType.CANCEL
+        """
         return Gtk.ResponseType.CANCEL
 
     def refresh(self) -> None:
+        """
+        Update device status.
+        """
         logger.debug('refresh: updating device state')
         self.t = Timer(2, self.refresh)
         self.t.start()
@@ -198,6 +322,9 @@ class Indicator:
 
 
 def kill_other_instances() -> None:
+    """
+    Kill other instances of the application.
+    """
     logger.info('Killing other instances')
     otherpid = subprocess.run(['pgrep', '-f', 'nvidia-power-manager'],
                               stdout=subprocess.PIPE)
@@ -217,7 +344,9 @@ def kill_other_instances() -> None:
 
 
 def main():
-
+    """
+    Application entry point.
+    """
     parser = argparse.ArgumentParser(
         description='NVidia Power Manager applet',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
