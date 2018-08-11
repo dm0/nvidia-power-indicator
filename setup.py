@@ -59,8 +59,5 @@ setup(
             'nvidia_power_manager/sbin/gpuswitcher'
         ])
     ],
-    dependency_links=[
-        'git+https://github.com/fbcotter/py3nvml#egg=py3nvml'
-    ],
     zip_safe=False
 )
