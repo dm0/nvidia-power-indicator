@@ -367,12 +367,17 @@ def main():
     if args.debug:
         args.log_level = 'DEBUG'
         log_handler = logging.StreamHandler()
+        log_formatter = logging.Formatter(
+            '%(asctime)s: %(levelname)s: %(message)s')
     else:
         log_handler = logging.handlers.SysLogHandler(args.syslog_socket)
+        log_formatter = logging.Formatter(
+            '%(name)s: %(levelname)s: %(message)s')
 
     logger.setLevel(getattr(logging, args.log_level.upper()))
-    log_handler.setLevel(getattr(logging, args.log_level.upper()))
+    log_handler.setFormatter(log_formatter)
     logger.addHandler(log_handler)
+    logging.captureWarnings(True)
 
     # If bbswitch isn't installed or isn't supported, exit cleanly
     if not os.path.isfile('/proc/acpi/bbswitch'):
