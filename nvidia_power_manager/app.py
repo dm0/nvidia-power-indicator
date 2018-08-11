@@ -369,8 +369,8 @@ def main():
     else:
         log_handler = logging.handlers.SysLogHandler(args.syslog_socket)
 
-    logger.set_level(getattr(logging, args.log_level.upper()))
-    log_handler.set_level(getattr(logging, args.log_level.upper()))
+    logger.setLevel(getattr(logging, args.log_level.upper()))
+    log_handler.setLevel(getattr(logging, args.log_level.upper()))
     logger.addHandler(log_handler)
 
     # If bbswitch isn't installed or isn't supported, exit cleanly
