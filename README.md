@@ -42,14 +42,6 @@ sudo apt-get install python3 mesa-utils bbswitch-dkms gir1.2-appindicator3
 sudo apt-get install $(sudo ubuntu-drivers devices | grep -o nvidia-[[:digit:]]*)
 ```
 
-## Troubleshooting
-
-### `appindicator` module missing
-Install the `gir1.2-appindicator3` package.
-
-### Couldn't find RGB GLX visual or fbconfig
-Install the `mesa-utils` package.
-
 ## Installation
 
 Use `pip` to install package. This package installs XDG autostart file and 
@@ -64,3 +56,14 @@ Applet will start on next reboot. Use the following command to start in current 
 ```bash
 nvidia-power-manager & disown
 ```
+
+## Troubleshooting
+
+### `appindicator` module missing
+Install the `gir1.2-appindicator3` package.
+
+### Couldn't find RGB GLX visual or fbconfig
+Install the `mesa-utils` package.
+
+### Installing from root session
+Installing from root session in Ubuntu doesn't work. Use `sudo` to install package. 
