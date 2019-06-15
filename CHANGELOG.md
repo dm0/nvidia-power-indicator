@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 Unreleased changes will be added to this section first.
 
+## [1.1.1] - 2019-06-15
 ### Added
 - Added support for building debian package.
+
+[1.1.1]: https://github.com/dm0/nvidia-power-manager/compare/v1.1.0...v1.1.1
 
 
 ## [1.1.0] - 2018-08-11
