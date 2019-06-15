@@ -1,0 +1,38 @@
+nvidia-power-manager (1.1.1) bionic; urgency=low
+
+  * Setup debian package.
+
+ -- Dmitri Lapin <lapin@cvisionlab.com>  Sat, 15 Jun 2019 00:00:00 +0000
+
+
+nvidia-power-manager (1.1.0) bionic; urgency=low
+
+  * Added support for logging. Logs to syslog by default.
+    Can log to `stderr` if started with `--debug` option.
+  * Improved error reporting.
+  * Fixed compatibility with Ubuntu 18.04.
+
+ -- Dmitri Lapin <lapin@cvisionlab.com>  Sat, 11 Aug 2018 00:00:00 +0000
+
+
+nvidia-power-manager (1.0.2) bionic; urgency=low
+
+  * Readme improvements: added information about starting application manually.
+
+ -- Dmitri Lapin <lapin@cvisionlab.com>  Mon, 21 May 2018 00:00:00 +0000
+
+
+nvidia-power-manager (1.0.1) bionic; urgency=low
+
+  * Added python package meta-data: project URL and license.
+
+ -- Dmitri Lapin <lapin@cvisionlab.com>  Mon, 21 May 2018 00:00:00 +0000
+
+
+nvidia-power-manager (1.0.0) bionic; urgency=low
+
+  * nvidia-power-manager: Initial release
+
+ -- Dmitri Lapin <lapin@cvisionlab.com>  Mon, 21 May 2018 00:00:00 +0000
+
+
