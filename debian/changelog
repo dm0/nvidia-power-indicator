@@ -1,4 +1,4 @@
-nvidia-power-manager (1.1.1+debfix3) bionic; urgency=low
+nvidia-power-manager (1.1.1+debfix4) bionic; urgency=low
 
   * Fixed build-time and run-time dependencies.
 
