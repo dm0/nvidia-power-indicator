@@ -8,11 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Unreleased changes will be added to this section first.
 
 
-## [1.1.2] - 2019-09-29
+## [1.1.3] - 2019-09-29
+Note: version 1.1.2 skipped due to a wrong build was submitted with this number.
 ### Added
 - Fixed error messages in syslog caused by a wrong modprobe / bbswitch order.
 
-[1.1.2]: https://github.com/dm0/nvidia-power-manager/compare/v1.1.1...v1.1.2
+[1.1.3]: https://github.com/dm0/nvidia-power-manager/compare/v1.1.1...v1.1.3
 
 
 ## [1.1.1] - 2019-06-15
