@@ -1,3 +1,10 @@
+nvidia-power-manager (1.1.2) bionic; urgency=low
+
+  * Fixed error messages in syslog caused by a wrong modprobe / bbswitch order.
+
+ -- Dmitri Lapin <lapin@cvisionlab.com>  Sat, 15 Jun 2019 00:00:03 +0000
+
+
 nvidia-power-manager (1.1.1+debfix4) bionic; urgency=low
 
   * Fixed build-time and run-time dependencies.
