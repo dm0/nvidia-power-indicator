@@ -35,8 +35,8 @@ rrmmod() {
 
 if [[ $1 == "on" ]]
 then
-    modprobe nvidia &>/dev/null
     tee /proc/acpi/bbswitch <<< ON &>/dev/null
+    modprobe nvidia &>/dev/null
 else
     # try modprobe -r first
     modprobe -r -a nvidia &>/dev/null

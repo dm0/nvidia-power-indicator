@@ -10,5 +10,5 @@ X-Python3-Version: >= 3.2
 Package: nvidia-power-manager
 Architecture: all
 Multi-Arch: foreign
-Depends: ${misc:Depends}, ${python3:Depends}, mesa-utils, bbswitch-dkms, gir1.2-appindicator3, python3-py3nvml
+Depends: ${misc:Depends}, ${python3:Depends}, mesa-utils, bbswitch-dkms, gir1.2-appindicator3-0.1, python3-py3nvml
 Description: Nvidia power manager applet to turn on / off discrete nvidia GPU.
